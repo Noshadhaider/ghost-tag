@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a0610"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>GHOST TAG</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:none}
+html,body{margin:0;height:100%;overflow:hidden;background:#0a0610;font-family:'Trebuchet MS',system-ui,sans-serif;color:#fff}
+#game{position:fixed;inset:0}
+.scr{position:fixed;inset:0;display:none;align-items:center;justify-content:center;overflow:auto;touch-action:pan-y;z-index:10;
+background:radial-gradient(circle at 78% 14%,#fff6d0 0,#f3e7b4 26px,transparent 28px),radial-gradient(ellipse at 50% 0,#3a1f6b 0,#150a2a 55%,#07030f 100%)}
+.scr.on{display:flex}
+.card{position:relative;z-index:2;width:min(92vw,420px);margin:auto;padding:16px 20px;text-align:center;display:flex;flex-direction:column;gap:10px}
+h1{margin:0;font-size:clamp(38px,9vh,64px);letter-spacing:4px;line-height:1;background:linear-gradient(#fff,#b9a3ff 60%,#7c5cff);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 0 14px #8b5cf6)}
+h1 span{display:block;background:linear-gradient(#aaffd4,#2de2a0);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 0 12px #2de2a0)}
+h2{margin:0;font-size:26px}.sub{margin:0;color:#c9b8ff;font-size:14px}
+input{touch-action:auto;user-select:text;width:100%;padding:13px;border-radius:12px;border:2px solid #5b3fa8;background:#1b1034;color:#fff;font:700 17px inherit;text-align:center;outline:0}
+input:focus{border-color:#a78bfa}
+.btn{border:0;border-radius:14px;padding:14px 20px;color:#fff;font:800 18px 'Trebuchet MS',system-ui;letter-spacing:1px;cursor:pointer;background:linear-gradient(#9b6bff,#6232d6);box-shadow:0 5px 0 #3b1a8f,0 10px 22px rgba(124,92,255,.45);flex:1}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #3b1a8f}.btn:disabled{filter:grayscale(.8);opacity:.5}
+.btn.o{background:linear-gradient(#ffb15a,#e56a10);box-shadow:0 5px 0 #92400b,0 10px 22px rgba(255,140,40,.4)}
+.btn.g{background:linear-gradient(#4de8a8,#12a56e);box-shadow:0 5px 0 #0a6b47,0 10px 22px rgba(30,220,150,.4)}
+.btn.r{background:linear-gradient(#ff6b86,#d02a4e);box-shadow:0 5px 0 #7d1630,0 10px 22px rgba(255,60,100,.35)}
+.row{display:flex;gap:10px}#jr{display:none}#jr.on{display:flex}#jc{text-transform:uppercase;letter-spacing:6px}
+small{color:#8f7fc0}#lg{width:84px;margin:0 auto;animation:fl 3s ease-in-out infinite;filter:drop-shadow(0 0 14px #8fe9ff)}
+@keyframes fl{50%{transform:translateY(-10px)}}
+#house{position:absolute;bottom:0;left:0;width:100%;height:34%;z-index:1;pointer-events:none}
+#rc{font:900 46px monospace;letter-spacing:10px;color:#2de2a0;text-shadow:0 0 16px #2de2a0;cursor:pointer}.lbl{font-size:11px;color:#9d8fd0}
+#pl{display:flex;flex-direction:column;gap:6px;max-height:34vh;overflow:auto}
+.pr{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border-radius:12px;padding:8px 12px;text-align:left}
+.pr i{width:22px;height:22px;border-radius:50%;border:2px solid #fff3}.pr b{flex:1}.pr em{font-size:10px;background:#ffb15a;color:#000;border-radius:6px;padding:2px 6px;font-style:normal;font-weight:800}
+#et{font-size:clamp(40px,10vh,70px)}#et.w{color:#ffd24d;text-shadow:0 0 24px #ffd24d}#et.l{color:#ff6b86;text-shadow:0 0 24px #d02a4e}
+#hud{display:none;position:fixed;inset:0;pointer-events:none;z-index:5}#hud *{pointer-events:auto}
+#top{position:absolute;top:calc(8px + env(safe-area-inset-top));left:10px;right:56px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+#top>*{pointer-events:none;background:rgba(15,8,30,.72);border:1px solid #fff2;border-radius:12px;padding:6px 12px;font-weight:800;font-size:14px;backdrop-filter:blur(4px)}
+#tm{font:900 24px monospace}#rl.gh{color:#8fe9ff;text-shadow:0 0 10px #8fe9ff}#rl.hm{color:#ffd24d}#al{color:#2de2a0;font-size:20px}
+#hd{display:none;color:#c9b8ff}
+#cm{position:absolute;top:26%;width:100%;text-align:center;font:900 clamp(22px,6vh,40px) 'Trebuchet MS';text-shadow:0 3px 12px #000,0 0 20px #8b5cf6;pointer-events:none;transition:opacity .3s;opacity:0}
+#fl{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .15s}
+#lz{position:absolute;left:0;top:0;width:50%;height:100%;pointer-events:auto}
+#jb{position:absolute;left:34px;bottom:34px;width:116px;height:116px;border-radius:50%;background:rgba(255,255,255,.07);border:2px solid #fff4;pointer-events:none}
+#jk{position:absolute;left:30px;top:30px;width:56px;height:56px;border-radius:50%;background:radial-gradient(#fff,#b9a3ff);box-shadow:0 0 14px #8b5cf6}
+.act{position:absolute;border-radius:50%;border:3px solid #fff6;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 13px 'Trebuchet MS';cursor:pointer;box-shadow:0 0 18px rgba(0,0,0,.5);bottom:calc(34px + env(safe-area-inset-bottom))}
+.act svg{width:34px;height:34px}#bR{right:28px;width:96px;height:96px;background:radial-gradient(#ffb15a,#e56a10)}
+#bN{right:140px;bottom:calc(48px + env(safe-area-inset-bottom));width:74px;height:74px;background:radial-gradient(#4de8a8,#0e8a5a)}#bN.off{filter:grayscale(1) brightness(.5)}
+#sb{position:absolute;right:28px;bottom:calc(138px + env(safe-area-inset-bottom));width:96px;height:8px;border-radius:5px;background:#0008;overflow:hidden}#sb i{display:block;height:100%;background:linear-gradient(90deg,#ffb15a,#ffe08a)}
+#toast{position:fixed;top:64px;left:50%;transform:translate(-50%,-20px);background:#2a1255ee;border:1px solid #a78bfa;border-radius:12px;padding:9px 16px;font-weight:700;opacity:0;transition:.25s;z-index:99;pointer-events:none;text-align:center;max-width:90vw}#toast.on{opacity:1;transform:translate(-50%,0)}
+
+.row.w{flex-wrap:wrap}.btn.s{font-size:14px;padding:10px 12px;flex:0 0 auto;box-shadow:0 3px 0 #3b1a8f}
+.btn.p{background:linear-gradient(#5ac8ff,#1f7fd6);box-shadow:0 5px 0 #0f4a8a,0 10px 22px rgba(60,160,255,.4)}
+#mp{display:flex;gap:8px}.mc{flex:1;border:2px solid #5b3fa8;border-radius:14px;padding:8px 4px;background:#1b1034;font-weight:800;font-size:12px;position:relative;overflow:hidden}
+.mc canvas{width:100%;height:54px;border-radius:8px;display:block;margin-bottom:5px;object-fit:cover}.mc.on{border-color:#2de2a0;box-shadow:0 0 14px #2de2a088}
+#mp.ro .mc{pointer-events:none}
+.pr u{font-size:10px;background:#4fb3ff;color:#000;border-radius:6px;padding:2px 6px;text-decoration:none;font-weight:800}
+#snd{position:fixed;top:calc(8px + env(safe-area-inset-top));right:10px;z-index:60;width:38px;height:38px;border-radius:50%;border:1px solid #fff3;background:rgba(15,8,30,.7);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;pointer-events:auto}
+#hud #top{top:calc(8px + env(safe-area-inset-top));right:56px}
+#wc{display:none;color:#ffd24d;font-size:12px}
+#vg{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(190,10,40,.75) 100%)}
+.how{text-align:left;font-size:14px;line-height:1.45;color:#e6dcff;background:rgba(255,255,255,.07);border-radius:14px;padding:12px 14px}.how b{color:#2de2a0}
+.es{font-size:15px;color:#c9b8ff}
+</style></head><body>
+<div id="game"></div>
+<div id="menu" class="scr on"><div class="card">
+<svg id="lg" viewBox="0 0 64 72"><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#9fcbff"/></linearGradient></defs><path d="M10 62C6 30 12 6 32 6s26 24 22 56l-8-7-7 8-7-8-7 8-7-8z" fill="url(#gg)" stroke="#fff" stroke-width="2"/><ellipse cx="24" cy="30" rx="5" ry="7" fill="#c8ff6b"/><ellipse cx="40" cy="30" rx="5" ry="7" fill="#c8ff6b"/><ellipse cx="32" cy="46" rx="5" ry="6" fill="#2a1c3a"/></svg>
+<h1>GHOST<span>TAG</span></h1><p class="sub">Hide. Run. Survive the night.</p>
+<input id="nm" maxlength="12" placeholder="Your name" autocomplete="off">
+<div class="row"><button class="btn" id="bq">PLAY ONLINE</button></div>
+<div class="row"><button class="btn p" id="bp">PRACTICE vs BOTS</button></div>
+<div class="row"><button class="btn o" id="bc">CREATE ROOM</button><button class="btn g" id="bj">JOIN ROOM</button></div>
+<div class="row" id="jr"><input id="jc" maxlength="4" placeholder="CODE"><button class="btn g" id="jg">JOIN</button></div>
+<div class="row"><button class="btn s" id="bh" style="flex:1;background:linear-gradient(#6b5a9a,#3f3270);box-shadow:0 3px 0 #251c4a">HOW TO PLAY</button></div>
+<div class="how" id="how" style="display:none"><b>Human:</b> joystick se hide ho, RUN dabao (stamina), ghost paas aaye to <b>STUN</b> grenade (sirf 1).<br><b>Ghost:</b> insaan ko touch karo - wo bhi ghost ban jata hai. DASH = tez jhapat.<br><b>Whistle:</b> har 60s ghost ko arrow milta hai (2 sec, approx).<br>Aakhri human bacha to jeet!</div>
+<small>2-8 players &middot; Last human standing wins</small><small><a href="/" style="color:#9fe8ff">Switch to 3D mode</a></small></div>
+<svg id="house" viewBox="0 0 400 100" preserveAspectRatio="xMidYMax slice"><path d="M0 100V80l30-6 20-30 18 30 40 4 10-26 12-18 12 18 10 26 60 2 24-34 30 34h40l20-52 20 52 40-6 30 12v50z" fill="#0c0618"/><g fill="#ffcc4d"><rect x="148" y="62" width="7" height="10" rx="2"/><rect x="170" y="62" width="7" height="10" rx="2"/><rect x="262" y="66" width="7" height="10" rx="2"/><rect x="300" y="52" width="7" height="10" rx="2"/></g></svg></div>
+<div id="lobby" class="scr"><div class="card"><h2>Room Lobby</h2><div class="lbl">ROOM CODE - TAP TO COPY</div><div id="rc"></div>
+<div class="lbl">MAP</div><div id="mp"></div><div id="pl"></div><p class="sub" id="wt"></p>
+<div class="row w" id="hb"><button class="btn s" id="bb1">+ BOT</button><button class="btn s" id="bb0">- BOT</button></div>
+<div class="row"><button class="btn g" id="bs">START MATCH</button><button class="btn r" id="bl">LEAVE</button></div></div></div>
+<div id="end" class="scr"><div class="card"><h1 id="et"></h1><p class="sub" id="es" style="font-size:18px"></p><p class="es" id="ev"></p><p class="es" id="em"></p>
+<div class="row"><button class="btn g" id="ba">PLAY AGAIN</button><button class="btn r" id="bm">MAIN MENU</button></div></div></div>
+<div id="hud"><div id="vg"></div><div id="fl"></div><div id="top"><span id="rl" class="hm">HUMAN</span><span id="hd">HIDDEN</span><span><b id="tm">--:--</b><br><span id="wc"></span></span><span>HUMANS <b id="al">0</b></span></div>
+<div id="cm"></div><div id="lz"></div><div id="jb"><div id="jk"></div></div><div id="sb"><i></i></div>
+<button id="bR" class="act"><svg viewBox="0 0 24 24" fill="#fff"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg><b>RUN</b></button>
+<button id="bN" class="act"><svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="14" r="7"/><path d="M10 4h5v3h-5z"/><path d="M15 5l4-2" stroke="#fff" stroke-width="2"/></svg><b>STUN</b></button></div>
+<button id="snd" aria-label="sound">&#128266;</button>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"></script>
+<script src="/socket.io/socket.io.js"></script><script src="map.js"></script><script src="art.js"></script><script src="client.js"></script>
+</body></html>

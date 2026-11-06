@@ -1,0 +1,13 @@
+<html><body style="margin:0;background:#222"><div id=o></div>
+<script src="../public/map.js"></script><script src="../public/art.js"></script>
+<script>
+const out=document.getElementById('o');
+for(const id of ['house','forest']){const M=GTMAP.MAPS[id],[b,t]=ART.maps(M);const c=ART.mkc(M.W,M.H),x=c.getContext('2d');x.drawImage(b,0,0);x.drawImage(t,0,0);c.id='m_'+id;c.style.width='800px';out.appendChild(c)}
+// sprite preview: fake scene capturing canvases
+const cap={};const sc={textures:{addCanvas(k,cv){cap[k]=cv;return {}},get(){return{add(){}}}}};
+const COL=[['#ff5d73','#c2304a'],['#4fb3ff','#2a6fcf'],['#ffd24d','#d49a12'],['#6be585','#2c9a52'],['#c07bff','#7a3fd0'],['#ff9a4d','#d0601a'],['#4de2d0','#1c9a8c'],['#ff7bd0','#cc3f9a']];
+const HAIR=['#3a2417','#222','#b5651d','#f2d06b','#6b3fa0','#c0392b','#1f3a5f','#eee'];
+COL.forEach((c,i)=>ART.mkHuman(sc,'h'+i,c,HAIR[i],i));ART.mkGhost(sc);
+const sp=ART.mkc(48*6*2,(64*8+76)*2),s=sp.getContext('2d');s.fillStyle='#2a2040';s.fillRect(0,0,sp.width,sp.height);s.scale(2,2);
+COL.forEach((c,i)=>s.drawImage(cap['h'+i],0,i*64));s.drawImage(cap.gh,0,512);sp.id='sprites';out.appendChild(sp);
+</script></body></html>
